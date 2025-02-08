@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sentence-transformers
+torch
+transformers
+python-multipart
+python-docx
+pymupdf
+easyocr
+faiss-cpu
+numpy

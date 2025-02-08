@@ -1,0 +1,13 @@
+.\backend
+├── data
+│   └── documents
+│       └── images
+├── chatbot.py
+├── document_processor.py
+├── main.py
+├── python_contents.txt
+├── requirements.txt
+├── script.py
+├── structure.py
+├── test.py
+└── vector_store.py
