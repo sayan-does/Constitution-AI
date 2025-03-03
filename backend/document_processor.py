@@ -4,6 +4,7 @@ import docx
 import easyocr
 from config import DOCUMENTS_DIR
 import uuid
+import os
 
 class DocumentProcessor:
     """Handles parsing and text extraction from various document types"""
@@ -31,11 +32,13 @@ class DocumentProcessor:
 
     @classmethod
     def process_document(cls, file, file_type):
-        file_path = DOCUMENTS_DIR / f"doc_{uuid.uuid4()}.{file_type}"
         """Process document based on file type"""
         type_map = {
             'pdf': cls.extract_text_from_pdf,
             'docx': cls.extract_text_from_docx, 
+            'jpg': cls.extract_text_from_image,
+            'jpeg': cls.extract_text_from_image,
+            'png': cls.extract_text_from_image,
             'image': cls.extract_text_from_image
         }
         
@@ -43,3 +46,32 @@ class DocumentProcessor:
             raise ValueError(f"Unsupported file type: {file_type}")
         
         return type_map[file_type](file)
+        
+    @classmethod
+    def process_directory_documents(cls):
+        """Process all documents in the DOCUMENTS_DIR"""
+        processed_texts = []
+        
+        if not DOCUMENTS_DIR.exists():
+            DOCUMENTS_DIR.mkdir(parents=True, exist_ok=True)
+            return processed_texts
+            
+        for file_path in DOCUMENTS_DIR.glob('**/*'):
+            if file_path.is_file():
+                file_type = file_path.suffix.lower().replace('.', '')
+                
+                # Skip unsupported file types
+                if file_type not in ['pdf', 'docx', 'jpg', 'jpeg', 'png']:
+                    continue
+                    
+                try:
+                    with open(file_path, 'rb') as f:
+                        file_content = f.read()
+                    
+                    text = cls.process_document(file_content, file_type)
+                    processed_texts.append(text)
+                    print(f"Processed: {file_path.name}")
+                except Exception as e:
+                    print(f"Error processing {file_path.name}: {str(e)}")
+                    
+        return processed_texts

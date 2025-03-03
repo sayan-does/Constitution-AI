@@ -135,6 +135,7 @@ class LegalRAGChatbot:
 def interactive_chat():
     """Interactive chat with the legal RAG chatbot"""
     chatbot = LegalRAGChatbot()
+    print("count",chatbot.vector_store.get_document_count())
     print("\n🔹 Welcome to the Legal RAG Chatbot! Type 'exit' to quit.\n")
     
     # Display knowledge base status
